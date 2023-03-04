@@ -39,7 +39,7 @@ class PassSaveGUI:
         self.add_button.grid(row=4, column=1, sticky="NSEW")
         self.clear_button = Button(text="Clear")
         self.clear_button.grid(row=4, column=2, sticky="NSEW")
-        self.search_button = Button(text="Search")
+        self.search_button = Button(text="Search", command=self.search_password)
         self.search_button.grid(row=4, column=3, sticky="NSEW")
 
     def generate_password(self):
@@ -54,6 +54,17 @@ class PassSaveGUI:
         else:
             self.be.save_data(self.website_var.get(), self.email_var.get(), self.password_var.get())
             messagebox.showinfo(title="Success", message="Successfully inserted!")
+
+    def search_password(self):
+        result = self.be.search_password(self.website_var.get())
+        if result is None:
+            messagebox.showinfo(title="Warning", message=f"We could not find a password for {self.website_var.get()}!")
+        else:
+            self.email_entry.delete(0, "end")
+            self.email_entry.insert(0, result[2])
+            self.password_entry.delete(0, "end")
+            self.password_entry.insert(0, result[3])
+
 def main():
     main_window = Tk()
     PassSave = PassSaveGUI(main_window)
