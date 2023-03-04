@@ -37,7 +37,7 @@ class PassSaveGUI:
         self.generate_pass_button.grid(row=3, column=3, sticky="NSEW")
         self.add_button = Button(text="Add", command=self.save_data)
         self.add_button.grid(row=4, column=1, sticky="NSEW")
-        self.clear_button = Button(text="Clear")
+        self.clear_button = Button(text="Clear", command=self.clear)
         self.clear_button.grid(row=4, column=2, sticky="NSEW")
         self.search_button = Button(text="Search", command=self.search_password)
         self.search_button.grid(row=4, column=3, sticky="NSEW")
@@ -53,6 +53,7 @@ class PassSaveGUI:
             messagebox.showinfo(title="Warning", message="Please make sure you have not left any field empty!")
         else:
             self.be.save_data(self.website_var.get(), self.email_var.get(), self.password_var.get())
+            self.clear()
             messagebox.showinfo(title="Success", message="Successfully inserted!")
 
     def search_password(self):
@@ -64,6 +65,13 @@ class PassSaveGUI:
             self.email_entry.insert(0, result[2])
             self.password_entry.delete(0, "end")
             self.password_entry.insert(0, result[3])
+
+    def clear(self):
+        self.website_entry.delete(0, "end")
+        self.email_entry.delete(0, "end")
+        self.password_entry.delete(0, "end")
+
+
 
 def main():
     main_window = Tk()
