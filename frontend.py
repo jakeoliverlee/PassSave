@@ -1,7 +1,10 @@
 from tkinter import *
+from backend import PassSaveBE
+
 
 class PassSaveGUI:
     def __init__(self, master):
+        self.be = PassSaveBE()
         master.title("PassSave")
         master.config(padx=50, pady=50)
         self.canvas = Canvas(height=200, width=200)
@@ -26,7 +29,7 @@ class PassSaveGUI:
         self.password_entry.grid(row=3, column=1, columnspan=2, sticky="NSEW")
 
         # Buttons
-        self.generate_pass_button = Button(text="Generate")
+        self.generate_pass_button = Button(text="Generate", command=self.generate_password)
         self.generate_pass_button.grid(row=3, column=3, sticky="NSEW")
         self.add_button = Button(text="Add")
         self.add_button.grid(row=4, column=1, sticky="NSEW")
@@ -34,6 +37,11 @@ class PassSaveGUI:
         self.clear_button.grid(row=4, column=2, sticky="NSEW")
         self.search_button = Button(text="Search")
         self.search_button.grid(row=4, column=3, sticky="NSEW")
+
+    def generate_password(self):
+        password = self.be.generate_pass()
+        self.password_entry.delete(0, "end")
+        self.password_entry.insert(0, password)
 
 
 def main():
