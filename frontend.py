@@ -1,5 +1,6 @@
 from tkinter import *
 from backend import PassSaveBE
+from tkinter import messagebox
 
 
 class PassSaveGUI:
@@ -21,17 +22,20 @@ class PassSaveGUI:
         self.password_label.grid(row=3, column=0)
 
         # Entries
-        self.website_entry = Entry(width=39)
+        self.website_var = StringVar()
+        self.email_var = StringVar()
+        self.password_var = StringVar()
+        self.website_entry = Entry(width=39, textvariable=self.website_var)
         self.website_entry.grid(row=1, column=1, columnspan=3, sticky="NSEW")
-        self.email_entry = Entry(width=39)
+        self.email_entry = Entry(width=39, textvariable=self.email_var)
         self.email_entry.grid(row=2, column=1, columnspan=3, sticky="NSEW")
-        self.password_entry = Entry(width=24)
+        self.password_entry = Entry(width=24, textvariable=self.password_var)
         self.password_entry.grid(row=3, column=1, columnspan=2, sticky="NSEW")
 
         # Buttons
         self.generate_pass_button = Button(text="Generate", command=self.generate_password)
         self.generate_pass_button.grid(row=3, column=3, sticky="NSEW")
-        self.add_button = Button(text="Add")
+        self.add_button = Button(text="Add", command=self.save_data)
         self.add_button.grid(row=4, column=1, sticky="NSEW")
         self.clear_button = Button(text="Clear")
         self.clear_button.grid(row=4, column=2, sticky="NSEW")
@@ -40,10 +44,16 @@ class PassSaveGUI:
 
     def generate_password(self):
         password = self.be.generate_pass()
+        # Deletes old password when button clicked
         self.password_entry.delete(0, "end")
         self.password_entry.insert(0, password)
 
-
+    def save_data(self):
+        if len(self.website_var.get()) == 0 or len(self.email_var.get()) == 0 or len(self.password_var.get()) == 0:
+            messagebox.showinfo(title="Warning", message="Please make sure you have not left any field empty!")
+        else:
+            self.be.save_data(self.website_var.get(), self.email_var.get(), self.password_var.get())
+            messagebox.showinfo(title="Success", message="Successfully inserted!")
 def main():
     main_window = Tk()
     PassSave = PassSaveGUI(main_window)
